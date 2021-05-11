@@ -1,3 +1,5 @@
+require('dotenv').config();
+const { MONGO_URI } = process.env;
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -15,11 +17,19 @@ let gfs = null;
 
 // DB
 //let mongoURI = "mongodb://localhost:27017/acme";
-let mongoURI = "mongodb+srv://dammy:t7Wa5Av4Ge@imguploader.f2kig.mongodb.net/imageUpload?retryWrites=true&w=majority";
+let mongoURI = MONGO_URI;
 
 // Connecting to the database
-mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, err => {console.log('connected')
-});
+mongoose.connect(MONGO_URI, { 
+    useNewUrlParser: true,
+    useUnifiedTopology: true, 
+    useCreateIndex: true, 
+    useFindAndModify: false 
+  },
+  err => {console.log('connected')}
+  );
+
+
 const conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'connection error:'));
 conn.once('open', function() {
